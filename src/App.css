@@ -1,42 +1,49 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* styles.css */
+
+/* Estilos para la lista de libros */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 10px;
+  display: inline-block;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+img {
+  width: 150px; /* Ajusta este valor según tus preferencias */
+  height: 200px; /* Ajusta este valor según tus preferencias */
+  object-fit: cover; /* Para mantener la proporción de aspecto */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Estilos para el formulario de agregar libro */
+form {
+  margin-top: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+label {
+  display: block;
+  margin-bottom: 10px;
 }
 
-.card {
-  padding: 2em;
+input {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
 }
 
-.read-the-docs {
-  color: #888;
+button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
 }

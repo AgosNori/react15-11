@@ -1,5 +1,5 @@
 import { Component } from "react";
-
+import './App.css'
 class App extends Component {
   constructor(props) {
     super(props);
@@ -45,22 +45,53 @@ class App extends Component {
   };
   filterBooks = () => {
     const { books, searchQuery } = this.state;
-    return books.filter((book) => 
-    book.title.toLowerCase().includes(searchQuery.toLowerCase())
+    return books.filter((book) =>
+      book.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
   render() {
     const filteredBooks = this.filterBooks();
-    
+
     return (
       <div>
         <ul>
           {filteredBooks.map((book) => (
             <li key={book.id}>
               <img src={`img/${book.image}`} alt={book.title} />
+              <p>{book.title}</p>
+              <p>Rating: {book.rating}</p>
+              <button onClick={() => this.updateBook(book.id, { rating: book.rating + 1 })}>
+                Incrementar Rating
+              </button>
+              <button onClick={() => this.updateBook(book.id, { rating: book.rating - 1 })}>
+                Decrementar Rating
+              </button>
+              <button onClick={() => this.deleteBook(book.id)}>Eliminar</button>
+              <button onClick={() => this.updateBook(book.id)}>Actualizar</button>
             </li>
           ))}
         </ul>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          {/* extrae el valor que tienen los campos ( lo que ingresa el usurio)*/ }
+          const title = e.target.title.value;
+          const rating = e.target.rating.value;
+          const image = e.target.image.value;
+          const newBook = {id:Date.now(),title,rating,image};
+          this.addBook(newBook);
+        }}>
+          <label>Titulo: 
+            <input type="text" name="title" required/>
+          </label>
+          <label>Rating: 
+            <input type="number" name="rating" required/>
+          </label>
+          <label>Imagen: 
+            <input type="text" name="image" required/>
+          </label>
+          <button type="submit">Agregar Libro</button>
+
+        </form>
 
       </div>
     )
