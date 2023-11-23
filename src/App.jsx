@@ -1,10 +1,13 @@
 import { Component } from "react";
 import './App.css'
+import Header from "./Components/Header/Header";
+
 class App extends Component {
   constructor(props) {
     super(props);
+    const storedBooks = JSON.parse(localStorage.getItem('books'));
     this.state = {
-      books: [
+      books: storedBooks || [
         { id: 0, rating: 3, title: 'Red Queen', image: 'Libro1.jpg' },
         { id: 1, rating: 5, title: 'El maravilloso mago de oz', image: 'Libro2.webp' },
         { id: 2, rating: 1, title: 'Peter pan ', image: 'Libro3.jpg' },
@@ -23,9 +26,12 @@ class App extends Component {
   }
   // funciones para agregar un nuevo libro
   addBook = (newBook) => {
-    this.setState((prevState) => ({
-      books: [...prevState.books, newBook],
-    }));
+    this.setState(
+      (prevState) => ({
+        books: [...prevState.books, newBook],
+      }),
+      () => localStorage.setItem('books', JSON.stringify(this.state.books))
+    );
   };
 
   // funcion para actualizar la info de un libro
@@ -34,15 +40,23 @@ class App extends Component {
       books: prevState.books.map((book) =>
         book.id === id ? { ...book, ...updateBook } : book
       ),
-    }));
+    }),
+      () => localStorage.setItem('books', JSON.stringify(this.state.books))
+    );
   };
 
   // funcion para eliminar un libro
   deleteBook = (id) => {
     this.setState((prevState) => ({
       books: prevState.books.filter((book) => book.id !== id),
-    }));
+    }),
+      () => localStorage.setItem('books', JSON.stringify(this.state.books))
+    );
   };
+  handleSearchChange = (e) => {
+    this.setState({ searchQuery: e.target.value })
+  }
+
   filterBooks = () => {
     const { books, searchQuery } = this.state;
     return books.filter((book) =>
@@ -54,43 +68,44 @@ class App extends Component {
 
     return (
       <div>
-        <ul>
+        <Header onSearchChange={this.handleSearchChange} />
+        <ul className="books">
           {filteredBooks.map((book) => (
             <li key={book.id}>
               <img src={`img/${book.image}`} alt={book.title} />
               <p>{book.title}</p>
               <p>Rating: {book.rating}</p>
               <button onClick={() => this.updateBook(book.id, { rating: book.rating + 1 })}>
-                Incrementar Rating
+                Incrementar
               </button>
               <button onClick={() => this.updateBook(book.id, { rating: book.rating - 1 })}>
-                Decrementar Rating
+                Decrementar
               </button>
               <button onClick={() => this.deleteBook(book.id)}>Eliminar</button>
               <button onClick={() => this.updateBook(book.id)}>Actualizar</button>
             </li>
           ))}
         </ul>
-        <form onSubmit={(e) => {
+        <form className="formulario" onSubmit={(e) => {
           e.preventDefault();
           {/* extrae el valor que tienen los campos ( lo que ingresa el usurio)*/ }
           const title = e.target.title.value;
           const rating = e.target.rating.value;
           const image = e.target.image.value;
-          const newBook = {id:Date.now(),title,rating,image};
+          const newBook = { id: Date.now(), title, rating, image };
           this.addBook(newBook);
         }}>
-          <label>Titulo: 
-            <input type="text" name="title" required/>
+          <label>Titulo:
+            <input type="text" name="title" required />
           </label>
-          <label>Rating: 
-            <input type="number" name="rating" required/>
+          <label>Rating:
+            <input type="number" name="rating" required />
           </label>
-          <label>Imagen: 
-            <input type="text" name="image" required/>
+          <label>Imagen:
+            <input type="text" name="image" required />
           </label>
           <button type="submit">Agregar Libro</button>
-
+      
         </form>
 
       </div>
